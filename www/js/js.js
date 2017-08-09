@@ -1,3 +1,12 @@
+const config = {
+    filesTotal: parseInt('{{files}}'),
+    onPage: parseInt('{{onPage}}'),
+    perPage: parseInt('{{perPage}}'),
+    offset: parseInt('{{offset}}'),
+}
+config.totalPages = Math.ceil(config.filesTotal / config.perPage);
+config.currPage = parseInt(config.offset / config.perPage);
+
 window.onload = () => {
     let modal = document.getElementById('imgModal'),
         modalImg = document.getElementById('modalImg'),
@@ -37,5 +46,15 @@ window.onload = () => {
             location.search = 'page=' + currPage;
         }
     })
-
 }
+
+// Pagination
+var pagesInit = function() {
+    Pagination.Init(document.getElementById('pagination'), {
+        size: config.totalPages, // pages size
+        page: config.currPage + 1,  // selected page
+        step: 3   // pages before and after current
+    });
+};
+
+document.addEventListener('DOMContentLoaded', pagesInit, false);

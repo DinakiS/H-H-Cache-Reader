@@ -6,11 +6,12 @@
     <style>
         {{css}}
     </style>
+    <script src="js/paginator.js"></script>
+    <link rel="stylesheet" href="css/pagination.css">
 </head>
 <body>
     <div class="pages">
-        <button data-go='prev'><</button>
-        <button data-go='next'>></button>
+        <div id='pagination'></div>
     </div>
     <div class="container">
         {{content}}

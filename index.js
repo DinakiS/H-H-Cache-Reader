@@ -1,12 +1,15 @@
 const express = require('express'),
     fs = require('fs');
+
 let app = express(),
     config = require('./config');
 
+app.use(express.static('www'));
+
 app.get('/', (req, res) => {
-    let css = fs.readFileSync('./css.css', 'utf8'),
-        js = fs.readFileSync('./js.js', 'utf8'),
-        tmpl = fs.readFileSync('./tmpl.html', 'utf8');
+    let css = fs.readFileSync('./www/css/css.css', 'utf8'),
+        js = fs.readFileSync('./www/js/js.js', 'utf8'),
+        tmpl = fs.readFileSync('./www/tmpl.html', 'utf8');
 
     let page = parseInt(req.query.page) || 0;
 
@@ -17,7 +20,7 @@ app.get('/', (req, res) => {
             offset = page * config.imgPerPage,
             limit = offset + config.imgPerPage;
 
-        let files = getAllFiles(config.cacheFolder, { offset: offset, limit: limit });
+        let {files, count} = getAllFiles(config.cacheFolder, { offset: offset, limit: limit });
 
         files.forEach(file => {
             html += `<div class="img-preview-wrap"><img src="data:image/jpeg;base64,${new Buffer(file.file).toString('base64')}" class='preview' alt="${file.path}"></div>`;
@@ -31,7 +34,10 @@ app.get('/', (req, res) => {
             css: css,
             js: js,
             content: html,
-            files: files.length
+            files: count,
+            onPage: files.length,
+            perPage: config.imgPerPage,
+            offset: offset
         }
 
         Object.keys(replace).forEach(key => tmpl = tmpl.replace(`{{${key}}}`, replace[key]));
@@ -54,7 +60,7 @@ function getAllFiles(dir, opt = { offset: 0, limit: config.imgPerPage }) {
         });
     }
 
-    return result;
+    return { files: result, count: statList.length};
 
     function getAllStats(dir, opt) {
         let list = fs.readdirSync(dir);
