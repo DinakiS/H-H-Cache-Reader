@@ -71,7 +71,7 @@ var Pagination = {
     
     ChangePage: function(page=Pagination.page - 1) {
         //page = page || Pagination.page - 1;
-        location.search = 'page=' + page;
+        updateQueryStringParameter('page', page);
     },
 
 

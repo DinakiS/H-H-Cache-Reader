@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="css/pagination.css">
 </head>
 <body>
+    <ul class="navigation">
+        <li><a href="/">All</a></li>
+        <li><a href="/?favorite">Favorites</a></li>
+    </ul>
     <div class="pages">
         <div id='pagination'></div>
     </div>
@@ -26,12 +30,15 @@
         <span id="closeModal" onclick='document.getElementById("imgModal").style.display="none"'>&times;</span>
         
         <img alt="" class="modal-content" id="modalImg">
-        
+        <div class='buttons'>
+            <button id="addToFav">❤</button>
+        </div>
         <div id="stat"></div>
     </div>
     
     <script>
         {{js}}
     </script>
+    <script src='js/external.js'></script>
 </body>
 </html>

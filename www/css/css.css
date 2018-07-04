@@ -31,10 +31,12 @@ img.preview:hover {
 }
 
 .modal {
+    display: flex;
     display: none;
+    flex-direction: column;
     position: fixed;
     z-index: 1;
-    padding-top: 100px;
+    /*padding-top: 100px;*/
     left: 0;
     top: 0;
     width: 100%;
@@ -48,6 +50,7 @@ img.preview:hover {
     display: block;
     width: 80%;
     max-width: 700px;
+    margin-top: 60px;
 }
 #stat {
     margin: auto;
@@ -57,7 +60,7 @@ img.preview:hover {
     text-align: center;
     color: #ccc;
     padding: 10px 0;
-    height: 150px;
+    /*height: 150px;*/
 }
 #closeModal {
     position: absolute;
@@ -74,4 +77,50 @@ img.preview:hover {
     color: #bbb;
     text-decoration: none;
     cursor: pointer;
+}
+ul.navigation {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    font-family: monospace;
+}
+.navigation li {
+    margin: 0 10px;
+}
+.navigation li a {
+    text-decoration: none;
+    color: #a297b3;
+}
+.navigation li a:hover, .navigation li.active a {
+    text-decoration: underline;
+    color: #262633;
+    font-weight: bold;
+}
+.buttons {
+    width: 700px;
+    min-height: 60px;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 60px;
+    text-align: center;
+}
+.buttons:hover button {
+    display: inline-block;
+}
+.buttons button {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 50px;
+    text-shadow: 0 0 3px #000;
+    cursor: pointer;
+}
+.buttons button:hover {
+    color: #eee;
+}
+.buttons button.active {
+    color: red;
 }

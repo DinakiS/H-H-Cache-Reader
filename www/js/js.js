@@ -18,13 +18,18 @@ window.onload = () => {
             let t = event.currentTarget;
             modal.style.display = 'block';
             modalImg.src = t.src;
+            modalImg.alt = t.alt;
             stat.innerHTML = t.alt;
+            
+            utils.removeSelected();
+            t.classList.add("selected");
         }
     })
 
     modal.onclick = function (event) {
         if (event.target.id == 'imgModal' || event.target.id == 'closeModal') {
             modal.style.display = 'none';
+            utils.removeSelected();
         }
     }
 
@@ -32,29 +37,56 @@ window.onload = () => {
     buttons.forEach(btn => {
         btn.onclick = event => {
             let target = event.currentTarget;
-            let currPage = location.search.match(/page=(\d+)/);
-            currPage = currPage ? parseInt(currPage[1]) : 0;
-
             if (target.textContent == '<') {
-                currPage--;
+                Pagination.Prev()
             } else if (target.textContent == '>') {
-                currPage++;
+                Pagination.Next()
             }
-
-            if (currPage < 0) currPage = 0;
-
-            location.search = 'page=' + currPage;
         }
     })
+
+    document.getElementById('addToFav').onclick = function (event) {
+        let xhr = new XMLHttpRequest();
+
+        let body = 'path=' + encodeURIComponent(document.getElementById('modalImg').alt);
+
+        xhr.open('POST', '/favorite', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.send(body);
+        document.getElementById('addToFav').classList.add('active');
+    }
+}
+
+const utils = {
+    isModal: function() {
+        return document.getElementById('imgModal').style.display === 'block';
+    },
+    removeSelected: function() {
+        let list = document.querySelectorAll('.selected');
+
+        list.forEach(item => item.classList.remove('selected'));
+    }
 }
 
 // Pagination
-var pagesInit = function() {
+var pagesInit = function () {
     Pagination.Init(document.getElementById('pagination'), {
         size: config.totalPages, // pages size
-        page: config.currPage + 1,  // selected page
-        step: 3   // pages before and after current
+        page: config.currPage + 1, // selected page
+        step: 3 // pages before and after current
     });
 };
 
 document.addEventListener('DOMContentLoaded', pagesInit, false);
+
+function updateQueryStringParameter(key, value) {
+    var uri = location.href;
+    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+    if (uri.match(re)) {
+        location.href = uri.replace(re, '$1' + key + "=" + value + '$2');
+    } else {
+        location.href = uri + separator + key + "=" + value;
+    }
+}
